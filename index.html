@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+    </style>
+    <title>Chat de consulta</title>
+</head>
+
+<body>
+
+    <!--JavaScript-->
+    <script>
+        let contador = 1;
+        let saludo = 0;
+        let tipoPreg;
+        let resp;
+
+        function respuestas() {
+            var texto = document.getElementById('consulta').value;
+            texto = texto.toLowerCase();
+
+            for (let i = 0; i < 1; i++) {
+                if (texto.indexOf('hola') >= 0 || texto.indexOf('buen') >= 0 || texto.indexOf('buenos') >= 0 || texto.indexOf('buenas') >= 0) {
+                    tipoPreg = 1;
+                    saludo++;
+                } else if (texto.indexOf('direccion') >= 0 || texto.indexOf('dirección') >= 0 || texto.indexOf('ubicacion') >= 0 || texto.indexOf('ubicación') >= 0 || texto.indexOf('lugar') >= 0 || texto.indexOf('domicilio') >= 0) {
+                    tipoPreg = 2;
+                } else if (texto.indexOf('hora') >= 0 || texto.indexOf('horario') >= 0 || texto.indexOf('horarios') >= 0 || texto.indexOf('atencion') >= 0) {
+                    tipoPreg = 3;
+                } else if (texto.indexOf('forma') >= 0 || texto.indexOf('formas') >= 0 || texto.indexOf('pago') >= 0 || texto.indexOf('efectivo') >= 0 || texto.indexOf('tarjeta') >= 0 || texto.indexOf('tarjetas') >= 0 || texto.indexOf('debito') >= 0 || texto.indexOf('credito') >= 0) {
+                    tipoPreg = 4;
+                } else if (texto.indexOf('descuento') >= 0 || texto.indexOf('descuentos') >= 0 || texto.indexOf('promoción') >= 0 || texto.indexOf('promociónes') >= 0) {
+                    tipoPreg = 5;
+                } else if (texto.indexOf('envio') >= 0 || texto.indexOf('envios') >= 0 || texto.indexOf('delivery') >= 0 || texto.indexOf('entrega') >= 0 || texto.indexOf('entregas') >= 0) {
+                    tipoPreg = 6;
+                } else {
+                    tipoPreg = 7;
+                }
+            }
+
+            if (tipoPreg == 1 && saludo < 2) {
+                resp = 'Hola, gracias por comunicarte con nosotros';
+            } else if (tipoPreg == 1 && saludo > 1) {
+                resp = '¿Cómo lo podemos ayudar?';
+            } else if (tipoPreg == 2) {
+                resp = 'Nuestra ubicación es: Calle Corrientes, n° 347';
+            } else if (tipoPreg == 3) {
+                resp = 'Trabajamos de Lunes a Viernes, de 10hs a 18hs';
+            } else if (tipoPreg == 4) {
+                resp = 'Recibimos efectivo y tarjetas de débito y crédito';
+            } else if (tipoPreg == 5) {
+                resp = 'Descuentos y promociones en: www.Pagina.com';
+            } else if (tipoPreg == 6) {
+                resp = 'Comunicarse con 2615566778 para coordinar';
+            } else if (tipoPreg == 7) {
+                resp = 'Sugerimos comunicarse al número: 2615566778';
+            }
+
+            return resp;
+        }
+
+        function consultar() {
+            let numero = contador++;
+
+            if (numero >= 10) {
+                numero = numero - 9;
+            } else if (numero >= 7) {
+                numero = numero - 6;
+            } else if (numero >= 4) {
+                numero = numero - 3;
+            }
+
+            var pregunta = document.getElementById('consulta').value;
+            var respuesta = respuestas();
+
+            // Mostrar pregunta y respuesta en el historial
+            var historial = document.querySelector('.chat-messages');
+            var historialItem = document.createElement('div');
+            historialItem.className = 'historial-item';
+            historialItem.innerHTML = `<strong>Pregunta:</strong> ${pregunta}<br><strong>Respuesta:</strong> ${respuesta}`;
+            historial.appendChild(historialItem);
+
+            document.getElementById('consulta').value = '';
+        }
+
+        function limpiarHistorial() {
+            var historial = document.querySelector('.chat-messages');
+            historial.innerHTML = '';
+        }
+
+        // Agregar evento para la tecla "Enter"
+        window.addEventListener("keydown", function (event) {
+            if (event.keyCode === 13) {
+                consultar();
+            }
+        });
+
+
+        function mostrarPreguntasFrecuentes() {
+            var preguntasFrecuentes = document.getElementById('preguntasFrecuentes');
+            preguntasFrecuentes.style.display = (preguntasFrecuentes.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function seleccionarRespuesta(tipo) {
+            document.getElementById('consulta').value = tipo;
+            consultar();
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var preguntaImg = document.getElementById('preguntaImg');
+            preguntaImg.addEventListener('click', mostrarPreguntasFrecuentes);
+        });
+
+    </script>
+
+    <!-- HTML -->
+    <!-- Formulario -->
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1 class="titulo">CHAT DE CONSULTA</h1>
+        </div>
+        <div class="chat-messages">
+            <!-- Preguntas y respuestas aquí -->
+        </div>
+        <div class="chat-clean">
+            <button id="limpiarHistorial" onclick="limpiarHistorial()">Limpiar <br>Historial</button>
+        </div>
+        <div class="chat-input">
+            <div class="preguntas-frecuentes">
+                <img id="preguntaImg" src="img/pregunta.png" alt="Preguntas Frecuentes">
+                <div id="preguntasFrecuentes" class="preguntas-frecuentes-content">
+                    <h3>Preguntas Frecuentes</h3>
+                    <p>En este chat puedes hacernos las preguntas que creas necesarias. Al hacer click en los botones
+                        verás las respuestas de algunas preguntas más frecuentes.</p>
+                    <img src="img/ubicacion.png" alt="Ubicación" onclick="seleccionarRespuesta('direccion')">
+                    <img src="img/telefono.png" alt="Teléfono" onclick="seleccionarRespuesta('telefono')">
+                    <img src="img/horario.png" alt="Horario" onclick="seleccionarRespuesta('hora')">
+                </div>
+            </div>
+            <input type="text" id="consulta" placeholder="Escribe aquí tu consulta o palabra clave">
+            <button id="confirmacion" onclick="consultar()">Enviar</button>
+        </div>
+    </div>
+
+</body>
+
+</html>
